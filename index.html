@@ -31,24 +31,71 @@
     </div>
 
     <script>
-        const ids = ["6850649058", "99999"]; // Tes IDs de test ici
-        function check() {
-            const val = document.getElementById('pid').value;
-            if(ids.includes(val)) {
-                document.getElementById('login').style.display = 'none';
-                document.getElementById('chat').style.display = 'block';
-            } else { alert("ID inconnu !"); }
+    // --- CONFIGURATION ---
+    // Remplace ces IDs par les vrais IDs de tes joueurs
+    let autorizedIDs = ["6850649058", "99999", "77777"]; 
+    const ADMIN_PASSWORD = "LAFOND_BOSS"; // Ton mot de passe pour gérer la liste
+
+    // --- LOGIQUE DE CONNEXION ---
+    function checkID() {
+        const id = document.getElementById('pid').value;
+        
+        // Si tu tapes le mot de passe admin à la place de l'ID
+        if (id === ADMIN_PASSWORD) {
+            showAdmin();
+            return;
         }
-        function send() {
-            const i = document.getElementById('min');
-            if(i.value) {
-                const d = document.createElement('div');
-                d.innerHTML = `<b>Moi:</b> ${i.value}`;
-                document.getElementById('msgs').appendChild(d);
-                i.value = "";
-            }
+
+        if (autorizedIDs.includes(id)) {
+            document.getElementById('login').style.display = 'none';
+            document.getElementById('chat').style.display = 'block';
+            document.getElementById('msgs').innerHTML += `<div style="color:gray; font-size:12px;">Bienvenue, soldat ${id} !</div>`;
+        } else {
+            alert("⚠️ ID INCONNU ! Contacte le chef de guilde.");
         }
-    </script>
+    }
+
+    // --- LOGIQUE ADMIN ---
+    function showAdmin() {
+        document.getElementById('login').innerHTML = `
+            <h1 style="color:#fff">ESPACE CHEF</h1>
+            <div id="id-list" style="text-align:left; margin-bottom:15px; max-height:150px; overflow-y:auto; border:1px solid #333; padding:10px;">
+                ${autorizedIDs.map(i => `<div style="display:flex; justify-content:space-between;"><span>${i}</span> <button onclick="removeID('${i}')" style="width:30px; padding:2px; margin-bottom:5px;">X</button></div>`).join('')}
+            </div>
+            <input type="text" id="new-id" placeholder="Nouvel ID Joueur">
+            <button onclick="addID()" style="margin-bottom:10px;">AJOUTER JOUEUR</button>
+            <button onclick="location.reload()" style="background:#333;">RETOUR</button>
+        `;
+    }
+
+    function addID() {
+        const newID = document.getElementById('new-id').value;
+        if(newID && !autorizedIDs.includes(newID)) {
+            autorizedIDs.push(newID);
+            showAdmin();
+            alert("Joueur ajouté !");
+        }
+    }
+
+    function removeID(id) {
+        autorizedIDs = autorizedIDs.filter(i => i !== id);
+        showAdmin();
+    }
+
+    // --- LOGIQUE CHAT ---
+    function send() {
+        const i = document.getElementById('min');
+        if(i.value) {
+            const d = document.createElement('div');
+            d.style.marginBottom = "10px";
+            d.innerHTML = `<span style="color:#f00; font-weight:bold;">Soldat:</span> ${i.value}`;
+            document.getElementById('msgs').appendChild(d);
+            i.value = "";
+            document.getElementById('msgs').scrollTop = document.getElementById('msgs').scrollHeight;
+        }
+    }
+                </script>
+    
 </body>
 </html>
 
