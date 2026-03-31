@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guilde Lafond</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body { background-color: #000; color: #fff; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .card { background: #1a1a1a; padding: 25px; border: 2px solid #f00; border-radius: 15px; text-align: center; width: 85%; }
+        h1 { color: #f00; margin-bottom: 10px; }
+        input { width: 90%; padding: 12px; margin: 15px 0; border-radius: 5px; border: 1px solid #333; background: #000; color: #fff; }
+        button { width: 100%; padding: 12px; background: #f00; color: #fff; border: none; border-radius: 5px; font-weight: bold; }
+        #chat { display: none; width: 100%; height: 100vh; }
+    </style>
+</head>
+<body>
+    <div id="login" class="card">
+        <h1>GUILDE PRIVÉE</h1>
+        <input type="text" id="pid" placeholder="Entre ton ID Free Fire">
+        <button onclick="check()">ENTRER</button>
+    </div>
+
+    <div id="chat">
+        <div style="padding: 20px; border-bottom: 1px solid #f00; color:#f00; font-weight:bold;">CHAT DE GUILDE</div>
+        <div id="msgs" style="flex:1; padding: 20px; overflow-y:auto;"></div>
+        <div style="padding: 10px; display:flex;">
+            <input type="text" id="min" placeholder="Message..." style="margin:0;">
+            <button onclick="send()" style="width:60px;">OK</button>
+        </div>
+    </div>
+
+    <script>
+        const ids = ["12345", "99999"]; // Tes IDs de test ici
+        function check() {
+            const val = document.getElementById('pid').value;
+            if(ids.includes(val)) {
+                document.getElementById('login').style.display = 'none';
+                document.getElementById('chat').style.display = 'block';
+            } else { alert("ID inconnu !"); }
+        }
+        function send() {
+            const i = document.getElementById('min');
+            if(i.value) {
+                const d = document.createElement('div');
+                d.innerHTML = `<b>Moi:</b> ${i.value}`;
+                document.getElementById('msgs').appendChild(d);
+                i.value = "";
+            }
+        }
+    </script>
+</body>
+</html>
+
